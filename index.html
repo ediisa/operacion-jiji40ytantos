@@ -4,24 +4,150 @@
   <meta charset="UTF-8">
   <title>Operación VINO40ytantos</title>
   <style>
-    body { background-color: #0a0a0a; color: #fff; font-family: 'Courier New', Courier, monospace; text-align: center; padding: 50px; }
-    .box { border: 2px dashed #ff69b4; padding: 30px; margin: auto; width: 80%; max-width: 500px; border-radius: 15px; background-color: #1a1a1a; }
-    .btn { margin-top: 20px; padding: 10px 20px; background-color: #ff69b4; border: none; color: white; font-size: 16px; cursor: pointer; border-radius: 10px; }
-    .btn:hover { background-color: #ff85c1; }
+    body {
+      background-color: #0a0a0a;
+      color: #fff;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+      padding: 50px;
+      overflow-x: hidden;
+    }
+    .box {
+      border: 2px dashed #ff69b4;
+      padding: 30px;
+      margin: auto;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 15px;
+      background-color: #1a1a1a;
+    }
+    .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #ff69b4;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .btn:hover {
+      background-color: #ff85c1;
+    }
+    #riddle, #success, #alert {
+      display: none;
+      margin-top: 20px;
+    }
+    .wine {
+      animation: fall 3s infinite;
+      font-size: 40px;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-100px); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(600px); opacity: 0; }
+    }
+    .heart {
+      position: absolute;
+      animation: float 5s infinite;
+      color: pink;
+      font-size: 24px;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-600px); opacity: 0; }
+    }
+    .wave {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Wave.svg/1920px-Wave.svg.png');
+      background-size: cover;
+      animation: waveMotion 4s infinite linear;
+      z-index: 999;
+    }
+    @keyframes waveMotion {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
   </style>
 </head>
 <body>
-  <div class="box">
+  <div class="box" id="main">
     <h1>🎉 Operación VINO40ytantos 🍷</h1>
     <p>Agente Pablo, tu misión ha sido activada.</p>
     <p>Objetivo: encontrar el vino rosé y el chocolate escondidos estratégicamente en territorio chileno.</p>
     <p><em>(Besitos calentitos enviados desde Nueva Zelanda...)</em></p>
-    <button class="btn" onclick="mensaje()">¿Quiere una galletita?</button>
+    <button class="btn" onclick="mostrarAdivinanza()">¿Quiere una galletita?</button>
+  </div>
+
+  <div class="box" id="riddle">
+    <p>Te daré una pista si respondes esta adivinanza:</p>
+    <p><strong>"Adivinanza adivinanza!! Tiene color de un sutil atardecer, aunque ahí no experimentamos el placer, mucha baba puede haber y mis pelitos también"</strong></p>
+    <input type="text" id="respuesta" placeholder="Tu respuesta aquí">
+    <br>
+    <button class="btn" onclick="verificarRespuesta()">Enviar respuesta</button>
+  </div>
+
+  <div class="box" id="success">
+    <h2>🎊 ¡Correcto! 🎊</h2>
+    <p>¡Celebración desbloqueada!</p>
+    <div class="wine">🍷🍷🍷🍷🍷</div>
+  </div>
+
+  <div class="box" id="alert">
+    <h2>🌊 Alerta Alerta!! Tsunami a la vista 🌊</h2>
+    <p>¡Respuesta incorrecta! Intenta otra vez.</p>
+    <button class="btn" onclick="mostrarAdivinanza()">Volver a intentar</button>
   </div>
 
   <script>
-    function mensaje() {
-      alert("Valla sorpresa... ¡La misión está llena de amor, vino y galletitas!");
+    function mostrarAdivinanza() {
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('success').style.display = 'none';
+      document.getElementById('alert').style.display = 'none';
+      document.getElementById('riddle').style.display = 'block';
+      removeEffects();
+    }
+
+    function verificarRespuesta() {
+      const respuesta = document.getElementById('respuesta').value.trim().toLowerCase();
+      document.getElementById('riddle').style.display = 'none';
+      if (respuesta === 'mi dormitorio') {
+        document.getElementById('success').style.display = 'block';
+        lanzarCorazones();
+      } else {
+        document.getElementById('alert').style.display = 'block';
+        mostrarOla();
+      }
+    }
+
+    function lanzarCorazones() {
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerText = '❤️';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.top = Math.random() * 100 + 'vh';
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+      }
+    }
+
+    function mostrarOla() {
+      const wave = document.createElement('div');
+      wave.className = 'wave';
+      wave.id = 'waveEffect';
+      document.body.appendChild(wave);
+      setTimeout(() => wave.remove(), 5000);
+    }
+
+    function removeEffects() {
+      const wave = document.getElementById('waveEffect');
+      if (wave) wave.remove();
+      document.querySelectorAll('.heart').forEach(h => h.remove());
     }
   </script>
 </body>
